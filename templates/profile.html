@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+<div class="min-h-screen py-12 px-4 sm:px-6 lg:px-8 animated-gradient">
+    <div class="max-w-xl mx-auto">
+        <!-- Profile Card -->
+        <div class="profile-card glass-effect rounded-2xl shadow-2xl overflow-hidden">
+            <!-- Top Decorative Bar -->
+            <div class="h-2 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500"></div>
+            
+            <div class="p-8">
+                <!-- Profile Header -->
+                <div class="relative mb-8">
+                    <!-- Profile Picture Container -->
+                    <div class="relative group">
+                        <div class="w-32 h-32 mx-auto rounded-full overflow-hidden ring-4 ring-white/30 group-hover:ring-white/50 transition-all duration-500 floating">
+                            <img src="{{ url_for('static', filename='/img/user.jpg') }}" 
+                                 alt="Profile Picture" 
+                                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        </div>
+                        <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full flex items-center justify-center">
+                            
+                        </div>
+                    </div>
+
+                    <!-- User Info -->
+                    <div class="text-center mt-4">
+                        <h2 class="text-3xl font-bold text-black mb-1">{{ user.full_name or "Your Full Name" }}</h2>
+                        <p class="text-black/80 text-lg">{{ user.username or "Your Username" }}</p>
+                    </div>
+                </div>
+
+                <!-- Profile Form -->
+                <form method="post" action="{{ url_for('profile') }}" id="profileForm" class="space-y-6">
+                    {% for field in [
+                        ('username', 'Username', 'text'),
+                        ('email', 'Email', 'email'),
+                        ('full_name', 'Full Name', 'text'),
+                        ('new_password', 'New Password', 'password')
+                    ] %}
+                    <div class="form-group relative">
+                        <input 
+                            type="{{ field[2] }}"
+                            id="{{ field[0] }}"
+                            name="{{ field[0] }}"
+                            class="peer w-full px-4 py-3 rounded-lg bg-white/10 text-black border-2 border-transparent 
+                                   focus:border-white/30 outline-none transition-all duration-300 placeholder-transparent"
+                            placeholder="{{ field[1] }}"
+                            value="{% if field[0] != 'new_password' %}{{ user[field[0]] or '' }}{% endif %}"
+                            {% if field[0] != 'new_password' %}required{% endif %}
+                        >
+                        <label 
+                            for="{{ field[0] }}"
+                            class="absolute left-4 -top-6 text-sm text-black/90 transition-all duration-300
+                                   peer-placeholder-shown:text-black/60 peer-placeholder-shown:top-3 
+                                   peer-placeholder-shown:left-4 peer-focus:-top-6 peer-focus:left-4 
+                                   peer-focus:text-black"
+                        >
+                            {{ field[1] }}
+                        </label>
+                        <div class="strength-bar hidden h-1 absolute bottom-0 left-0 transition-all duration-300"></div>
+                    </div>
+                    {% endfor %}
+
+                    <!-- Action Buttons -->
+                    <div class="flex justify-between items-center mt-8 space-x-4">
+                        <button type="submit" 
+                                class="flex-1 bg-white/10 hover:bg-white/20 text-black font-semibold py-3 px-6 rounded-lg
+                                       transition-all duration-300 transform hover:scale-105 focus:scale-95">
+                            <span class="relative">
+                                Update Profile
+                                <span class="absolute bottom-0 left-0 w-full h-0.5 bg-white transform scale-x-0 
+                                           transition-transform duration-300 group-hover:scale-x-100"></span>
+                            </span>
+                        </button>
+                        <a href="{{ url_for('logout') }}" 
+                           class="px-6 py-3 text-black/90 hover:text-black font-medium rounded-lg
+                                  hover:bg-white/10 transition-all duration-300">
+                            Logout
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+{% endblock %}

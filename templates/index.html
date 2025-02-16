@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerEdu - Find Your Dream Job or Scholarship</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <nav>
+        <a href="#" class="logo">CareerEdu</a>
+        <button class="cta-button" onclick="redirectToLogin()">Login / Sign Up</button>
+    </nav>
+
+    <main class="hero">
+        <div class="hero-content">
+            <h1>Shape Your Future</h1>
+            <p class="tagline">Find Your Dream Job or Scholarship</p>
+            <button class="cta-button" onclick="redirectToLogin()">Get Started</button>
+        </div>
+        <div class="hero-image">
+            <img src="{{ url_for('static', filename='img/img.png') }}" alt="Career Education Illustration">
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+</body>
+</html>

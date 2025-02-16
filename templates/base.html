@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="flex flex-col min-h-screen">
+        <header>
+            <nav class="bg-white shadow-sm py-4">
+              <div class="container mx-auto flex justify-between items-center">
+                <a href="{{ url_for('index') }}" class="logo text-2xl font-bold text-blue-600">CareerEdu</a>
+                <div class="flex items-center space-x-6">
+                  {% if 'user_id' in session %}
+                  <a href="{{ url_for('dashboard') }}" class="text-gray-600 hover:text-blue-600 transition-colors">
+                    <i class="fas fa-tachometer-alt mr-2"></i>
+                    Dashboard
+                  </a>
+                  <a href="{{ url_for('profile') }}" class="text-gray-600 hover:text-blue-600 transition-colors">
+                    <i class="fas fa-user-circle mr-2"></i>
+                    Profile
+                  </a>
+                  <a href="{{ url_for('bot') }}" class="text-gray-600 hover:text-blue-600 transition-colors">
+                    <i class="fas fa-robot mr-2"></i>
+                    AI Assistant
+                  </a>
+                  <a href="{{ url_for('logout') }}" class="text-gray-600 hover:text-blue-600 transition-colors">
+                    <i class="fas fa-sign-out-alt mr-2"></i>
+                    Logout
+                  </a>
+                  {% else %}
+                  <a href="{{ url_for('login_signup') }}" class="text-gray-600 hover:text-blue-600 transition-colors">
+                    <i class="fas fa-sign-in-alt mr-2"></i>
+                    Login/Signup
+                  </a>
+                  {% endif %}
+                </div>
+              </div>
+            </nav>
+          </header>
+
+        <main class="flex-grow">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="bg-{{ category }}-500 text-white px-4 py-3 rounded-md mt-4 mx-4">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer class="bg-gray-800 text-white py-4 mt-auto">
+            <div class="container mx-auto text-center">
+                &copy; 2024 CareerEdu. All rights reserved.
+            </div>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

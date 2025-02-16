@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% block title %}Login/Signup{% endblock %}
+{% block content %}
+
+<div class="container mx-auto my-8 px-4">
+    <div class="max-w-md mx-auto">
+        <div class="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4">
+
+            <div class="mb-4">
+                <ul class="flex border-b border-gray-200">
+                    <li class="-mb-px mr-1">
+                        <a class="bg-white inline-block py-2 px-4 text-blue-500 font-semibold" href="#" onclick="toggleForm('login')">Login</a>
+                    </li>
+                    <li class="mr-1">
+                        <a class="bg-white inline-block py-2 px-4 text-gray-400 hover:text-gray-600 font-semibold" href="#" onclick="toggleForm('signup')">Signup</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Login Form -->
+            <div id="login-form">
+                <form method="post" action="{{ url_for('login_signup') }}">
+                    <input type="hidden" name="action" value="login">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-bold mb-2" for="email">Email</label>
+                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" name="email" type="email" placeholder="Enter your email" required>
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-gray-700 font-bold mb-2" for="password">Password</label>
+                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password" name="password" type="password" placeholder="Enter your password" required>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">Login</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Signup Form -->
+            <div id="signup-form" class="hidden">
+                <form method="post" action="{{ url_for('login_signup') }}">
+                    <input type="hidden" name="action" value="signup">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-bold mb-2" for="username">Username</label>
+                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" name="username" type="text" placeholder="Enter a username" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-bold mb-2" for="email">Email</label>
+                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" name="email" type="email" placeholder="Enter your email" required>
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-gray-700 font-bold mb-2" for="password">Password</label>
+                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password" name="password" type="password" placeholder="Enter a password" required>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">Sign Up</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Flash message popup container -->
+<div id="flash-message-popup" class="hidden">
+    <div class="popup-content">
+        <span id="flash-message-text"></span>
+    </div>
+</div>
+
+<!-- CSS for flash message popup -->
+<style>
+    #flash-message-popup {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: #4CAF50;
+        color: white;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+        animation: fadeInOut 5s ease-in-out;
+    }
+    .popup-content {
+        font-size: 1rem;
+        font-weight: bold;
+    }
+    @keyframes fadeInOut {
+        0% { opacity: 0; transform: translateY(-20px); }
+        10% { opacity: 1; transform: translateY(0); }
+        90% { opacity: 1; }
+        100% { opacity: 0; transform: translateY(-20px); }
+    }
+</style>
+
+<!-- JavaScript to toggle forms and display flash messages as popup -->
+<script>
+    function toggleForm(formType) {
+        const loginForm = document.getElementById('login-form');
+        const signupForm = document.getElementById('signup-form');
+        if (formType === 'login') {
+            loginForm.classList.remove('hidden');
+            signupForm.classList.add('hidden');
+        } else {
+            signupForm.classList.remove('hidden');
+            loginForm.classList.add('hidden');
+        }
+    }
+
+    // Function to show flash message popup
+    function showFlashMessage(message) {
+        const popup = document.getElementById('flash-message-popup');
+        const messageText = document.getElementById('flash-message-text');
+        messageText.textContent = message;
+        popup.classList.remove('hidden');
+        
+        // Hide the popup after 4 seconds
+        setTimeout(() => {
+            popup.classList.add('hidden');
+        }, 4000);
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Display flash messages as popup alerts
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    showFlashMessage("{{ message | replace('"', '\\"') | replace('\n', '\\n') }}");
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    });
+</script>
+
+{% endblock %}
